@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/style.css">
+    <title>Admin Page</title>
+</head>
+<body>
+    <nav>
+        <h4>============= Clark's Vans Service Admin Page =============</h4>
+        <ul>
+            <li><a href="/settings">Settings - {{user.fname}} {{user.lname}}</a></li>
+            <li><a href="/auth/logout">Log Out</a></li>
+        </ul>
+    </nav>
+
+    <table id="reservations" class="table table-striped table-bordered table-sm" cellspacing="0" width="50%">
+        <thead>
+            <tr>
+                <th class="th-sm">ID</th> 
+                <th class="th-sm">Email</th>
+                <th class="th-sm">Destination A</th>
+                <th class="th-sm">Destination B</th>
+                <th class="th-sm">Number of People</th>
+                <th class="th-sm">Date and Time</th>
+                <th class="th-sm">Noti sent?</th> 
+                <th class="th-sm">Resolved?</th> 
+            </tr>
+        </thead>
+        <tbody>
+            {{#each reservations}}
+            <tr>
+                <td>
+                    <form action="/each_reservation/{{_id}}" method="GET"> 
+                        <button class="btn btn-primary" name="id" value={{_id}}>Go to booking</button>
+                    </form>
+                </td>
+                <td>{{email}}</td> 
+                <td>{{desA}}</td>
+                <td>{{desB}}</td>
+                <td>{{num_people}}</td>
+                <td>{{date_and_time}}</td>
+                <td>{{noti_sent}}</td>
+                <td>{{resolved}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+</body>
+</html>
