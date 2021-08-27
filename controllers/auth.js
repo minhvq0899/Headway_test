@@ -38,15 +38,11 @@ exports.register_fn = (req, res) => {
     // Validate input
     // Missing a field
     if (first_name == "" || last_name == "" || grad_year == "" || email == "" || password == "" || password_confirm == "") {
-        return res.render('register', {
-            message_fail: "Missing one or more fields"
-        })
+        res.status(400).send("Mising a field");    
     }
     // Check if it's a Clark email
     if (!email.includes("@clarku.edu")) {
-        return res.render('register', {
-            message_fail: 'Must register with a Clark email'
-        })
+        res.status(400).send("Not a Clark email");    
     }
 
     // Validation done. Now insert the new account into our database
@@ -65,10 +61,7 @@ exports.register_fn = (req, res) => {
         const result = await newAcc.save(); 
         authDebug(result);
 
-        return res.render('register', { 
-            message_success: 'User registered' 
-        }); 
-        
+        res.status(200).send("Register successfully");    
     }
     
     // Check for duplicate email
@@ -77,13 +70,9 @@ exports.register_fn = (req, res) => {
         authDebug('Email list', email_list); 
 
         if (email_list.length > 0) {
-            return res.render('register', {
-                message_fail: 'Email has already been taken'
-            }); 
+            res.status(400).send("Email taken");     
         } else if ( password !== password_confirm ) {
-            return res.render('register', {
-                message_fail: 'Password do not match'
-            }); 
+            res.status(400).send("Pasword do not match");    
         } else {
             insertNewAcc(); 
         }
@@ -100,9 +89,7 @@ exports.login_fn = async (req, res) => {
         const { email, password } = req.body; 
         // validate input
         if ( !email || !password ) {
-            return res.status(400).render('login', {
-                message: 'Please provide both email and password'
-            })
+            res.status(400).send("Please provide both email and password");    
         }
 
         // query db to check if the provided email and password are correct
@@ -111,9 +98,7 @@ exports.login_fn = async (req, res) => {
         const user = email_list[0]; 
 
         if ( email_list.length == 0 || !(await bcrypt.compare(password, user.password)) ) {
-            return res.status(401).render('login', {
-                message: 'Email or Password is incorrect'
-            })  
+            res.status(401).send("Email or Password is incorrect");    
         } else {
             // create a token for each user
             const token = user.generateAuthToken(); 
@@ -128,9 +113,9 @@ exports.login_fn = async (req, res) => {
             res.cookie('jwt', token, cookieOptions); 
             authDebug(token); 
             if (user.admin) {
-                res.status(200).redirect("/admin_page");     
+                res.status(200).send("User is an admin"); 
             } else {
-                res.status(200).redirect("/"); 
+                res.status(200).send("User is a user"); 
             }
         }
     } catch (error) {
@@ -149,7 +134,7 @@ exports.logout_fn = async (req, res) => {
     });
     req.session = null;
     authDebug("Someone has just logged out");
-    res.status(200).redirect('/');
+    res.status(200).send('Log out successfully');
 }
 
     
@@ -187,14 +172,10 @@ exports.update_fn = async (req, res) => {
             }
         }, {upsert: false} )
         authDebug(result); 
-        return res.render('settings', {
-            message_success: 'Name Updated'
-        })
+        res.status(200).send('Update successfully');
     } catch (error) {
         authDebug(error); 
-        return res.render('settings', {
-            message_fail: "Update Fail"
-        })
+        res.status(400).send('Update fail. Please try again');
     }
 }
 

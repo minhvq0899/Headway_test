@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser'); 
 const startupDebug = require('debug')('app:startup');
 const dbDebug = require('debug')('app:db'); 
+const rateLimit = require('./middleware/rateLimiter'); 
 
 dotenv.config({ path: './.env'}); 
 
@@ -28,10 +29,12 @@ app.use(express.urlencoded({ extended: false}));
 app.use(express.json()); 
 app.use(cookieParser()); 
 
+// Rate limit
+app.use(rateLimit.rateLimiterUsingThirdParty);
+
 app.set('view engine', 'hbs'); 
  
 // define routes
-app.use('/', require('./routes/pages')); 
 app.use('/auth', require('./routes/auth')); 
 app.use('/bookings', require('./routes/bookings')); 
 

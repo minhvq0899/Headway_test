@@ -26,13 +26,9 @@ exports.booking_fn = (req, res) => {
     // Validate input
     // Missing a field
     if (desA == "" || desB == "" || (!num_people)) {
-        return res.render('booking', {
-            message_fail: "Missing one or more fields"
-        })
+        res.status(400).send('Missing one or more field');
     } else if (desA == desB) {
-        return res.render('booking', {
-            message_fail: "Destination A and Destination B cannot be the same"
-        })
+        res.status(400).send('Des A and Des B cannot be the same');
     }
 
     async function insertDes() {
@@ -46,13 +42,9 @@ exports.booking_fn = (req, res) => {
         const result = await reservation.save(); 
         bookingDebugger(result);
         if (result) {
-            return res.render('booking', {
-                message_success: "Successful! Refresh the page every 3 minutes to see confirmation"
-            })
+            res.status(200).send('Successful');
         } else {
-            return res.render('booking', {
-                message_fail: "Unsuccessful! Please try again!"
-            })
+            res.status(400).send('Unsuccessful! Please try again!');
         }
     }
 
