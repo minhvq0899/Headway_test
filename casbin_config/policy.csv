@@ -1,5 +1,0 @@
-﻿p,Administrator,/*,GET
-p,Administrator,/*,POST
-p,Administrator,/*,PUT
-p,Administrator,/*,DELETE
-g,Administrator,OT.IT.ADOR.OPS,ANTT,HTCN,manager,TLN1.Data,TLN2.CIC,TLN3,TLD.Report
