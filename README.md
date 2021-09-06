@@ -1,1 +1,1 @@
-# Test API for Headway
+# Test API for current internship
